@@ -100,7 +100,7 @@
         // Blur filter component
         const feGaussianBlur = document.createElementNS(svgNS, 'feGaussianBlur');
         feGaussianBlur.setAttribute('in', 'SourceGraphic');
-        feGaussianBlur.setAttribute('stdDeviation', '8');
+        feGaussianBlur.setAttribute('stdDeviation', '6');
         feGaussianBlur.setAttribute('result', 'blur');
 
         // Matrix thresholding for gooey visual fidelity
@@ -191,9 +191,9 @@
           <div class="antigravity-icon-wrapper">
             ${this.getIconSvg(config.icon)}
           </div>
-          <div class="flex-grow-1 min-w-0">
-            ${toastObj.title ? `<div class="fw-bold mb-0 lh-sm fs-6 text-truncate">${toastObj.title}</div>` : ''}
-            ${toastObj.message ? `<div class="small mb-0 opacity-75 lh-sm ${toastObj.title ? 'mt-1' : ''}">${toastObj.message}</div>` : ''}
+          <div class="antigravity-toast-content">
+            ${toastObj.title ? `<div class="antigravity-toast-title">${toastObj.title}</div>` : ''}
+            ${toastObj.message ? `<div class="antigravity-toast-message">${toastObj.message}</div>` : ''}
           </div>
           <button class="antigravity-close-btn" aria-label="Dismiss toast">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>

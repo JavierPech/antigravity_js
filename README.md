@@ -101,7 +101,10 @@ To bypass this, **AntigravityJS** maintains parallel layers:
           └── [content capsule #2]
 ```
 
-Both trees share identical dimensions and animation transformations synced via CSS custom properties (`--x`, `--y`, `--s`, `--o`, `--h`), maintaining seamless alignments while isolating filters.
+Both trees share identical dimensions and animation timelines, but utilize decoupled positioning pipelines to satisfy browser graphics engines:
+1. **Background Layer (`.antigravity-bg-layer`)**: Positioned and moved using standard layout CSS properties (`left`, `top`, `bottom`). Because layout changes execute on the browser's main/layout thread, the browser **never** promotes individual background capsules to separate GPU-composited layers during transitions. This forces the SVG gooey filter to rasterize inline on every frame, eliminating transparent container lag or repaint glitches.
+2. **Content Layer (`.antigravity-content-layer`)**: Translated using hardware-accelerated GPU `transform` coordinates (`translate()` and `scale()`) with `will-change` triggers for fluid, sub-pixel rendering.
+3. Both layers stay in perfect lockstep alignment, synced automatically by sharing the exact same timing bezier curves (`cubic-bezier(0.175, 0.885, 0.32, 1.275)`) and durations (`0.6s`).
 
 ---
 
