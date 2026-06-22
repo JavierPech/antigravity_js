@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>antigravity.js - Premium Liquid Gooey Toast Library</title>
+  
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  
+  <!-- antigravity.js Library CSS -->
+  <link rel="stylesheet" href="antigravity.css">
+  
+  <!-- Premium Custom Styling for Showcase -->
+  <style>
+    body {
+      background: radial-gradient(circle at 50% 50%, #1e293b 0%, #0b0f19 100%);
+      color: #f8fafc;
+      min-height: 100vh;
+      font-family: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      overflow-x: hidden;
+    }
+    
+    .glass-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 20px;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    }
+    
+    .gradient-text {
+      background: linear-gradient(135deg, #38bdf8 0%, #818cf8 50%, #c084fc 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-weight: 800;
+    }
+    
+    .code-box {
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      padding: 16px;
+      font-family: 'Fira Code', 'Courier New', Courier, monospace;
+      font-size: 0.9rem;
+      color: #e2e8f0;
+      position: relative;
+    }
+    
+    .code-box::before {
+      content: 'JavaScript';
+      position: absolute;
+      top: 6px;
+      right: 12px;
+      font-size: 0.75rem;
+      color: rgba(255, 255, 255, 0.3);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    
+    .btn-trigger {
+      border-radius: 14px;
+      padding: 12px 18px;
+      font-weight: 600;
+      transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      border: 1px solid transparent;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    
+    .btn-trigger:hover {
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    }
+    
+    /* Harmonious custom colors for the demonstration buttons */
+    .btn-antigravity-success { background: #10b981; color: white; }
+    .btn-antigravity-success:hover { background: #059669; color: white; box-shadow: 0 0 15px rgba(16, 185, 129, 0.4); }
+    
+    .btn-antigravity-danger { background: #f43f5e; color: white; }
+    .btn-antigravity-danger:hover { background: #e11d48; color: white; box-shadow: 0 0 15px rgba(244, 63, 94, 0.4); }
+    
+    .btn-antigravity-warning { background: #f59e0b; color: #1e293b; }
+    .btn-antigravity-warning:hover { background: #d97706; color: #1e293b; box-shadow: 0 0 15px rgba(245, 158, 11, 0.4); }
+    
+    .btn-antigravity-info { background: #06b6d4; color: white; }
+    .btn-antigravity-info:hover { background: #0891b2; color: white; box-shadow: 0 0 15px rgba(6, 182, 212, 0.4); }
+    
+    .btn-antigravity-primary { background: #6366f1; color: white; }
+    .btn-antigravity-primary:hover { background: #4f46e5; color: white; box-shadow: 0 0 15px rgba(99, 102, 241, 0.4); }
+    
+    .btn-antigravity-dark { background: #1e293b; color: white; border: 1px solid rgba(255, 255, 255, 0.1); }
+    .btn-antigravity-dark:hover { background: #0f172a; color: white; box-shadow: 0 0 15px rgba(30, 41, 59, 0.4); }
+    
+    .btn-antigravity-light { background: #ffffff; color: #0f172a; }
+    .btn-antigravity-light:hover { background: #f1f5f9; color: #0f172a; box-shadow: 0 0 15px rgba(255, 255, 255, 0.4); }
+    
+    .event-logger {
+      background: rgba(15, 23, 42, 0.45);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      height: 180px;
+      overflow-y: auto;
+      font-family: monospace;
+      font-size: 0.85rem;
+      padding: 12px;
+      color: #38bdf8;
+    }
+    
+    .event-log-entry {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+      padding: 4px 0;
+    }
+    
+    .event-time { color: #64748b; }
+    .event-badge {
+      display: inline-block;
+      padding: 2px 6px;
+      font-size: 0.7rem;
+      border-radius: 4px;
+      font-weight: bold;
+      text-transform: uppercase;
+      margin-right: 6px;
+    }
+    .badge-open { background: rgba(16, 185, 129, 0.15); color: #34d399; }
+    .badge-close { background: rgba(244, 63, 94, 0.15); color: #fb7185; }
+    .badge-sys { background: rgba(99, 102, 241, 0.15); color: #818cf8; }
+    
+    .form-select, .form-control {
+      background-color: rgba(15, 23, 42, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: white;
+      border-radius: 10px;
+    }
+    .form-select:focus, .form-control:focus {
+      background-color: rgba(15, 23, 42, 0.8);
+      border-color: #6366f1;
+      color: white;
+      box-shadow: 0 0 0 0.25rem rgba(99, 102, 241, 0.25);
+    }
+    .form-label {
+      font-weight: 500;
+      color: #94a3b8;
+    }
+    
+    .badge-pill {
+      font-size: 0.75rem;
+      padding: 4px 10px;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container py-5">
+    <!-- Header -->
+    <div class="text-center mb-5">
+      <div class="d-inline-flex align-items-center gap-2 mb-2">
+        <span class="badge-pill">v1.0.0</span>
+        <span class="badge-pill text-info">Dependency Free</span>
+        <span class="badge-pill text-success">Gooey Stacking</span>
+      </div>
+      <h1 class="display-4 fw-extrabold mb-2">
+        <span class="gradient-text">antigravity.js</span>
+      </h1>
+      <p class="lead text-secondary col-md-8 mx-auto">
+        A premium, lightweight, dependency-free Vanilla JS toast notification library mimicking organic react-antigravity liquid interactions, spring overshoots, and clean layer-isolated filters.
+      </p>
+    </div>
+
+    <div class="row g-4">
+      <!-- Left Configurator Panel -->
+      <div class="col-lg-5">
+        <div class="glass-card p-4 h-100">
+          <h3 class="mb-4 fs-4 text-white d-flex align-items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-primary"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="9" y1="3" x2="9" y2="21"></line></svg>
+            Configuration
+          </h3>
+          
+          <form id="configForm">
+            <!-- Position -->
+            <div class="mb-3">
+              <label for="configPosition" class="form-label">Position Alignment</label>
+              <select class="form-select" id="configPosition">
+                <option value="bottom-right" selected>bottom-right</option>
+                <option value="bottom-left">bottom-left</option>
+                <option value="bottom-center">bottom-center</option>
+                <option value="top-right">top-right</option>
+                <option value="top-left">top-left</option>
+                <option value="top-center">top-center</option>
+              </select>
+            </div>
+
+            <!-- Gooey Filter Switch -->
+            <div class="mb-3 d-flex align-items-center justify-content-between">
+              <div>
+                <label class="form-label mb-0" for="configGooey">Enable Gooey Effect</label>
+                <div class="small text-muted">Blends overlapping capsules organically</div>
+              </div>
+              <div class="form-check form-switch fs-4">
+                <input class="form-check-input" type="checkbox" id="configGooey" checked>
+              </div>
+            </div>
+
+            <!-- Stacking Gap -->
+            <div class="mb-3">
+              <div class="d-flex justify-content-between">
+                <label for="configGap" class="form-label">Stacking Gap (px)</label>
+                <span class="text-primary fw-bold" id="gapValue">16px</span>
+              </div>
+              <input type="range" class="form-range" id="configGap" min="0" max="32" step="2" value="16">
+            </div>
+
+            <!-- Toast Duration -->
+            <div class="mb-3">
+              <div class="d-flex justify-content-between">
+                <label for="configDuration" class="form-label">Notification Duration</label>
+                <span class="text-primary fw-bold" id="durationValue">5000ms</span>
+              </div>
+              <input type="range" class="form-range" id="configDuration" min="1000" max="15000" step="500" value="5000">
+              <div class="small mt-1 text-warning" id="durationWarning" style="display:none; font-size: 0.75rem;">
+                Note: Values under 5000ms are auto-promoted to 5000ms (minimum requirement).
+              </div>
+            </div>
+
+            <!-- Max Toasts -->
+            <div class="mb-4">
+              <div class="d-flex justify-content-between">
+                <label for="configMax" class="form-label">Max Visible Toasts</label>
+                <span class="text-primary fw-bold" id="maxValue">5</span>
+              </div>
+              <input type="range" class="form-range" id="configMax" min="1" max="10" step="1" value="5">
+            </div>
+          </form>
+
+          <h5 class="text-white small uppercase tracking-wider mb-2">Live Setup Code</h5>
+          <pre class="code-box"><code id="codeSnippet">const antigravity = new antigravityJS({
+  position: 'bottom-right',
+  gooey: true,
+  maxToasts: 5,
+  gap: 16
+});</code></pre>
+        </div>
+      </div>
+
+      <!-- Right Interaction & Demo Panel -->
+      <div class="col-lg-7">
+        <div class="glass-card p-4 h-100 d-flex flex-column justify-content-between">
+          <div>
+            <h3 class="mb-4 fs-4 text-white d-flex align-items-center gap-2">
+              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-info"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+              Trigger Notifications
+            </h3>
+            
+            <p class="text-secondary small mb-3">
+              Hover over the container of active toasts on screen to pause the dismiss timer automatically. Move the cursor away to resume the countdown.
+            </p>
+
+            <div class="d-flex flex-wrap gap-2 mb-4">
+              <button class="btn btn-trigger btn-antigravity-success flex-grow-1" id="triggerSuccess">
+                Success Toast
+              </button>
+              <button class="btn btn-trigger btn-antigravity-danger flex-grow-1" id="triggerDanger">
+                Danger Toast
+              </button>
+              <button class="btn btn-trigger btn-antigravity-warning flex-grow-1" id="triggerWarning">
+                Warning Toast
+              </button>
+              <button class="btn btn-trigger btn-antigravity-info flex-grow-1" id="triggerInfo">
+                Info Toast
+              </button>
+              <button class="btn btn-trigger btn-antigravity-primary flex-grow-1" id="triggerPrimary">
+                Primary Toast
+              </button>
+            </div>
+
+            <div class="d-flex flex-wrap gap-2 mb-4">
+              <button class="btn btn-trigger btn-antigravity-dark flex-grow-1" id="triggerDark">
+                Dark Mode
+              </button>
+              <button class="btn btn-trigger btn-antigravity-light flex-grow-1" id="triggerLight">
+                Light Mode
+              </button>
+              <button class="btn btn-trigger btn-outline-info flex-grow-1" id="triggerPersistent">
+                Persistent Alert
+              </button>
+            </div>
+
+            <div class="d-flex gap-2 mb-4">
+              <button class="btn btn-sm btn-outline-danger w-50 py-2 border-0" id="actionClearQueue" style="background: rgba(244, 63, 94, 0.05);">
+                Clear Queue
+              </button>
+              <button class="btn btn-sm btn-outline-warning w-50 py-2 border-0" id="actionDestroy" style="background: rgba(245, 158, 11, 0.05);">
+                Destroy antigravityJS
+              </button>
+            </div>
+          </div>
+
+          <!-- Event Logger -->
+          <div>
+            <h5 class="text-white fs-6 mb-2 d-flex justify-content-between align-items-center">
+              <span>Lifecycle Callback Logs</span>
+              <button class="btn btn-sm text-secondary p-0" id="clearLogsBtn" style="font-size:0.75rem;">Clear Console</button>
+            </h5>
+            <div class="event-logger custom-scroll" id="eventLog">
+              <div class="event-log-entry"><span class="event-time">[System]</span> <span class="event-badge badge-sys">system</span>antigravityJS logging loaded. Trigger an event above.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- antigravity.js Script -->
+  <script src="antigravity.js"></script>
+
+  <!-- Interaction Logic -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      let antigravity = null;
+      const eventLog = document.getElementById('eventLog');
+      
+      // Logger Helper
+      function logEvent(type, text) {
+        const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
+        const badgeClass = type === 'open' ? 'badge-open' : (type === 'close' ? 'badge-close' : 'badge-sys');
+        
+        const entry = document.createElement('div');
+        entry.className = 'event-log-entry';
+        entry.innerHTML = `<span class="event-time">[${time}]</span> <span class="event-badge ${badgeClass}">${type}</span>${text}`;
+        
+        eventLog.appendChild(entry);
+        eventLog.scrollTop = eventLog.scrollHeight;
+      }
+
+      // Recreate instance based on configurator settings
+      function updateantigravityInstance() {
+        if (antigravity) {
+          antigravity.destroy();
+          logEvent('system', 'Destroyed previous antigravityJS instance');
+        }
+
+        const position = document.getElementById('configPosition').value;
+        const gooey = document.getElementById('configGooey').checked;
+        const gap = parseInt(document.getElementById('configGap').value, 10);
+        const maxToasts = parseInt(document.getElementById('configMax').value, 10);
+
+        // Update indicators
+        document.getElementById('gapValue').innerText = `${gap}px`;
+        document.getElementById('maxValue').innerText = maxToasts;
+
+        // Instantiate
+        antigravity = new antigravityJS({
+          position,
+          gooey,
+          gap,
+          maxToasts
+        });
+
+        logEvent('system', `Initialized antigravityJS with position: <strong>${position}</strong>, gooey: <strong>${gooey}</strong>`);
+
+        // Update code snippet
+        document.getElementById('codeSnippet').innerHTML = `const antigravity = new antigravityJS({
+  position: '${position}',
+  gooey: ${gooey},
+  maxToasts: ${maxToasts},
+  gap: ${gap}
+});`;
+      }
+
+      // Config Form Change Watchers
+      document.getElementById('configPosition').addEventListener('change', updateantigravityInstance);
+      document.getElementById('configGooey').addEventListener('change', updateantigravityInstance);
+      
+      document.getElementById('configGap').addEventListener('input', (e) => {
+        document.getElementById('gapValue').innerText = `${e.target.value}px`;
+      });
+      document.getElementById('configGap').addEventListener('change', updateantigravityInstance);
+      
+      document.getElementById('configMax').addEventListener('input', (e) => {
+        document.getElementById('maxValue').innerText = e.target.value;
+      });
+      document.getElementById('configMax').addEventListener('change', updateantigravityInstance);
+
+      // Duration Listener
+      const durationInput = document.getElementById('configDuration');
+      const durationValue = document.getElementById('durationValue');
+      const durationWarning = document.getElementById('durationWarning');
+
+      durationInput.addEventListener('input', (e) => {
+        const val = parseInt(e.target.value, 10);
+        durationValue.innerText = `${val}ms`;
+        if (val < 5000) {
+          durationWarning.style.display = 'block';
+        } else {
+          durationWarning.style.display = 'none';
+        }
+      });
+
+      function getDurationValue() {
+        return parseInt(durationInput.value, 10);
+      }
+
+      // Trigger buttons
+      document.getElementById('triggerSuccess').addEventListener('click', () => {
+        antigravity.show({
+          title: 'Success Operation',
+          message: 'Data synchronised successfully with primary nodes.',
+          bootstrapContext: 'success',
+          duration: getDurationValue(),
+          onOpen: (toast) => logEvent('open', `Toast #${toast.id} (success) entered view`),
+          onClose: (toast) => logEvent('close', `Toast #${toast.id} (success) starting exit`)
+        });
+      });
+
+      document.getElementById('triggerDanger').addEventListener('click', () => {
+        antigravity.show({
+          title: 'Database Outage',
+          message: 'Connection terminated unexpectedly. Retrying query...',
+          bootstrapContext: 'danger',
+          duration: getDurationValue(),
+          onOpen: (toast) => logEvent('open', `Toast #${toast.id} (danger) entered view`),
+          onClose: (toast) => logEvent('close', `Toast #${toast.id} (danger) starting exit`)
+        });
+      });
+
+      document.getElementById('triggerWarning').addEventListener('click', () => {
+        antigravity.show({
+          title: 'High Latency Warning',
+          message: 'Server response times are currently above 850ms.',
+          bootstrapContext: 'warning',
+          duration: getDurationValue(),
+          onOpen: (toast) => logEvent('open', `Toast #${toast.id} (warning) entered view`),
+          onClose: (toast) => logEvent('close', `Toast #${toast.id} (warning) starting exit`)
+        });
+      });
+
+      document.getElementById('triggerInfo').addEventListener('click', () => {
+        antigravity.show({
+          title: 'System Information',
+          message: 'Maintenance scheduled for tonight at 23:00 GMT.',
+          bootstrapContext: 'info',
+          duration: getDurationValue(),
+          onOpen: (toast) => logEvent('open', `Toast #${toast.id} (info) entered view`),
+          onClose: (toast) => logEvent('close', `Toast #${toast.id} (info) starting exit`)
+        });
+      });
+
+      document.getElementById('triggerPrimary').addEventListener('click', () => {
+        antigravity.show({
+          title: 'Integrations Update',
+          message: 'Third-party integrations successfully mapped and indexed.',
+          bootstrapContext: 'primary',
+          duration: getDurationValue(),
+          onOpen: (toast) => logEvent('open', `Toast #${toast.id} (primary) entered view`),
+          onClose: (toast) => logEvent('close', `Toast #${toast.id} (primary) starting exit`)
+        });
+      });
+
+      document.getElementById('triggerDark').addEventListener('click', () => {
+        antigravity.show({
+          title: 'Environment: Production',
+          message: 'Switched context to primary secure production cluster.',
+          bootstrapContext: 'dark',
+          duration: getDurationValue(),
+          onOpen: (toast) => logEvent('open', `Toast #${toast.id} (dark) entered view`),
+          onClose: (toast) => logEvent('close', `Toast #${toast.id} (dark) starting exit`)
+        });
+      });
+
+      document.getElementById('triggerLight').addEventListener('click', () => {
+        antigravity.show({
+          title: 'Performance Report',
+          message: 'All system memory indices are below 30% utilization.',
+          bootstrapContext: 'light',
+          duration: getDurationValue(),
+          onOpen: (toast) => logEvent('open', `Toast #${toast.id} (light) entered view`),
+          onClose: (toast) => logEvent('close', `Toast #${toast.id} (light) starting exit`)
+        });
+      });
+
+      document.getElementById('triggerPersistent').addEventListener('click', () => {
+        antigravity.show({
+          title: 'Persistent Check',
+          message: 'This notification will stay on-screen indefinitely.',
+          bootstrapContext: 'primary',
+          duration: 0,
+          onOpen: (toast) => logEvent('open', `Toast #${toast.id} (persistent) entered view`),
+          onClose: (toast) => logEvent('close', `Toast #${toast.id} (persistent) starting exit`)
+        });
+      });
+
+      document.getElementById('actionClearQueue').addEventListener('click', () => {
+        const queuedCount = antigravity.queue.length;
+        antigravity.queue = [];
+        logEvent('system', `Cleared all <strong>${queuedCount}</strong> queued toasts`);
+      });
+
+      document.getElementById('actionDestroy').addEventListener('click', () => {
+        antigravity.destroy();
+        logEvent('system', 'Invoked antigravityJS instance destroy() method');
+      });
+
+      document.getElementById('clearLogsBtn').addEventListener('click', () => {
+        eventLog.innerHTML = '<div class="event-log-entry"><span class="event-time">[System]</span> <span class="event-badge badge-sys">system</span>Console cleared.</div>';
+      });
+
+      // Initial Instance Startup
+      updateantigravityInstance();
+    });
+  </script>
+</body>
+</html>
+

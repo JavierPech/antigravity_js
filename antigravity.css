@@ -1,0 +1,581 @@
+/* antigravity JS CSS Stylesheet */
+
+:root {
+  /* Premium, vibrant context colors (overriding generic Bootstrap hues) */
+  --antigravity-success: #10b981;    /* Emerald 500 */
+  --antigravity-danger: #f43f5e;     /* Rose 500 */
+  --antigravity-warning: #f59e0b;    /* Amber 500 */
+  --antigravity-info: #06b6d4;       /* Cyan 500 */
+  --antigravity-primary: #6366f1;    /* Indigo 500 */
+  --antigravity-dark: #0f172a;       /* Slate 900 */
+  --antigravity-light: #ffffff;      /* Pure white */
+  
+  /* Text colors on context backgrounds */
+  --antigravity-text-light-bg: #1e293b; /* Slate 800 */
+  --antigravity-text-dark-bg: #ffffff;
+}
+
+/* antigravity Containers - Fixed Positioning */
+.antigravity-container {
+  position: fixed;
+  z-index: 1090; /* High enough to overlay navigation but allow modals above */
+  width: 360px;
+  max-width: calc(100vw - 32px);
+  pointer-events: none;
+  overflow: visible;
+  height: 0; /* Keeps layout space zeroed out, rendering elements dynamically */
+}
+
+/* Position Adjustments */
+.antigravity-container.position-bottom-right {
+  bottom: 24px;
+  right: 24px;
+}
+.antigravity-container.position-bottom-left {
+  bottom: 24px;
+  left: 24px;
+}
+.antigravity-container.position-bottom-center {
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.antigravity-container.position-top-right {
+  top: 24px;
+  right: 24px;
+}
+.antigravity-container.position-top-left {
+  top: 24px;
+  left: 24px;
+}
+.antigravity-container.position-top-center {
+  top: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* Layers: Background vs Content */
+.antigravity-bg-layer,
+.antigravity-content-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+
+/* Gooey Layer Styling - Chains SVG gooey filter and high-quality shadow */
+.antigravity-bg-layer.antigravity-gooey-active {
+  filter: url(#antigravity-gooey) drop-shadow(0 12px 30px rgba(15, 23, 42, 0.15)) drop-shadow(0 4px 10px rgba(15, 23, 42, 0.08));
+}
+
+/* Toast Wrappers - Share exact same sizing & transform values */
+.antigravity-toast-bg-wrapper,
+.antigravity-toast-content-wrapper {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: var(--h, 64px);
+  will-change: transform, opacity;
+  
+  /* High fidelity spring transition for transform, linear/ease-out for opacity */
+  transition: 
+    transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+    opacity 0.4s ease-out,
+    height 0.4s ease-in-out;
+    
+  transform: translate3d(var(--x, 0), var(--y, 0), 0) scale(var(--s, 1));
+  opacity: var(--o, 0);
+}
+
+/* Absolute anchor based on stack direction */
+.position-bottom-right .antigravity-toast-bg-wrapper,
+.position-bottom-right .antigravity-toast-content-wrapper,
+.position-bottom-left .antigravity-toast-bg-wrapper,
+.position-bottom-left .antigravity-toast-content-wrapper,
+.position-bottom-center .antigravity-toast-bg-wrapper,
+.position-bottom-center .antigravity-toast-content-wrapper {
+  bottom: 0;
+}
+
+.position-top-right .antigravity-toast-bg-wrapper,
+.position-top-right .antigravity-toast-content-wrapper,
+.position-top-left .antigravity-toast-bg-wrapper,
+.position-top-left .antigravity-toast-content-wrapper,
+.position-top-center .antigravity-toast-bg-wrapper,
+.position-top-center .antigravity-toast-content-wrapper {
+  top: 0;
+}
+
+/* Individual Toast Shadows when Gooey is disabled */
+.antigravity-bg-layer:not(.antigravity-gooey-active) .antigravity-toast-bg-wrapper {
+  filter: drop-shadow(0 10px 25px rgba(15, 23, 42, 0.12)) drop-shadow(0 2px 6px rgba(15, 23, 42, 0.04));
+}
+
+/* Background Capsules (No text/content inside, purely colored blob shapes) */
+.antigravity-toast-bg {
+  width: 100%;
+  height: 100%;
+  border-radius: 28px; /* High-rounded capsule */
+  transition: background-color 0.3s ease;
+}
+
+/* Content Element Wrapper (Pointer events enabled so buttons can be clicked) */
+.antigravity-toast-content-wrapper {
+  pointer-events: auto;
+}
+
+/* Custom capsule styling */
+.antigravity-toast-capsule {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 20px;
+  width: 100%;
+  height: 100%;
+  border-radius: 28px;
+  box-sizing: border-box;
+  box-shadow: 
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.2), 
+    inset 0 -1px 0 0 rgba(0, 0, 0, 0.1);
+}
+
+.antigravity-text-light.antigravity-toast-capsule {
+  box-shadow: 
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.8), 
+    inset 0 -1px 0 0 rgba(15, 23, 42, 0.05);
+}
+
+/* Icon & Graphic Settings */
+.antigravity-icon-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.15);
+  flex-shrink: 0;
+  transition: background-color 0.3s ease;
+  position: relative; /* required for absolute ripples */
+}
+
+/* Success: Dynamic scaling heartbeat and glow (looping periodically every 4s) */
+.antigravity-text-success .antigravity-icon-wrapper {
+  animation: antigravity-success-idle 4.0s cubic-bezier(0.25, 0.8, 0.25, 1) 2.8s infinite;
+}
+
+.antigravity-text-success .antigravity-icon-wrapper::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  border-radius: 50%;
+  border: 1.5px solid #10b981; /* neon success green */
+  box-shadow: 0 0 8px #10b981;
+  pointer-events: none;
+  opacity: 0;
+  transform: scale(1);
+  animation: antigravity-success-ripple 4.0s cubic-bezier(0.1, 0.8, 0.3, 1) 2.8s infinite;
+}
+
+@keyframes antigravity-success-idle {
+  0%, 25%, 100% { transform: scale(1); background-color: rgba(255, 255, 255, 0.15); }
+  4% { transform: scale(1.1); background-color: rgba(255, 255, 255, 0.3); }
+  8% { transform: scale(1.0); background-color: rgba(255, 255, 255, 0.15); }
+  12% { transform: scale(1.06); background-color: rgba(255, 255, 255, 0.25); }
+}
+
+@keyframes antigravity-success-ripple {
+  0% { transform: scale(1); opacity: 0; }
+  2% { opacity: 0.8; }
+  15% { transform: scale(1.6); opacity: 0; }
+  100% { transform: scale(1.6); opacity: 0; }
+}
+
+/* Generic pulses for Dark & Light Themes (looping periodically every 4s) */
+.antigravity-text-dark .antigravity-icon-wrapper,
+.antigravity-text-light .antigravity-icon-wrapper {
+  animation: antigravity-generic-idle 4.0s ease-in-out 2.8s infinite;
+}
+
+@keyframes antigravity-generic-idle {
+  0%, 25%, 100% { transform: scale(1); }
+  12% { transform: scale(1.08); }
+}
+
+@keyframes antigravity-icon-bounce {
+  0% { transform: scale(0.5); opacity: 0; }
+  50% { transform: scale(1.25); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.antigravity-icon-wrapper svg {
+  animation: antigravity-icon-bounce 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.5) forwards;
+  transform-origin: center;
+}
+
+/* Close Button Design */
+.antigravity-close-btn {
+  background: none;
+  border: none;
+  color: inherit;
+  opacity: 0.5;
+  transition: opacity 0.2s ease, transform 0.2s ease, background-color 0.2s ease;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+.antigravity-close-btn:hover {
+  opacity: 0.9;
+  transform: scale(1.1);
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+/* Context Color Overrides - Premium vibrant linear gradients */
+.antigravity-bg-success { background: linear-gradient(135deg, #059669 0%, #10b981 100%); }
+.antigravity-bg-danger  { background: linear-gradient(135deg, #e11d48 0%, #f43f5e 100%); }
+.antigravity-bg-warning { background: linear-gradient(135deg, #d97706 0%, #f59e0b 100%); }
+.antigravity-bg-info    { background: linear-gradient(135deg, #0891b2 0%, #06b6d4 100%); }
+.antigravity-bg-primary { background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%); }
+.antigravity-bg-dark    { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); }
+.antigravity-bg-light   { background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border: 1px solid rgba(15, 23, 42, 0.08); }
+
+/* Text color adapters for context classes */
+.antigravity-text-success, .antigravity-text-danger, .antigravity-text-info, .antigravity-text-primary, .antigravity-text-dark {
+  color: var(--antigravity-text-dark-bg);
+}
+.antigravity-text-warning {
+  color: var(--antigravity-text-light-bg);
+}
+.antigravity-text-light {
+  color: var(--antigravity-text-light-bg);
+}
+
+/* Adjustments for light & warning background close/icon wrappers */
+.antigravity-text-light .antigravity-icon-wrapper,
+.antigravity-text-warning .antigravity-icon-wrapper {
+  background-color: rgba(15, 23, 42, 0.08);
+}
+.antigravity-text-light .antigravity-close-btn:hover,
+.antigravity-text-warning .antigravity-close-btn:hover {
+  background-color: rgba(15, 23, 42, 0.08);
+}
+
+/* Exit Transition Modifications (No bouncing when leaving, sequential slide-out) */
+.antigravity-toast-bg-wrapper.antigravity-leaving,
+.antigravity-toast-content-wrapper.antigravity-leaving {
+  transition: 
+    transform 0.4s cubic-bezier(0.4, 0, 0.2, 1) 0.25s,
+    opacity 0.35s ease-in 0.25s !important;
+  opacity: 0 !important;
+}
+
+/* Swipe-out exit paths based on alignment with rotational wobble */
+.position-bottom-right .antigravity-leaving,
+.position-top-right .antigravity-leaving {
+  transform: translate3d(120%, var(--y), 0) rotate(8deg) scale(0.9) !important;
+}
+.position-bottom-left .antigravity-leaving,
+.position-top-left .antigravity-leaving {
+  transform: translate3d(-120%, var(--y), 0) rotate(-8deg) scale(0.9) !important;
+}
+.position-bottom-center .antigravity-leaving {
+  transform: translate3d(0, calc(var(--y) + 80px), 0) rotate(4deg) scale(0.8) !important;
+}
+.position-top-center .antigravity-leaving {
+  transform: translate3d(0, calc(var(--y) - 80px), 0) rotate(-4deg) scale(0.8) !important;
+}
+
+/* Custom Scrollbar for demo event logger, unrelated but nice */
+.custom-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+.custom-scroll::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.03);
+  border-radius: 3px;
+}
+.custom-scroll::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 3px;
+}
+.custom-scroll::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.25);
+}
+
+/* antigravity Success Animated SVG (Draw & Spin-Retract) */
+.antigravity-icon-wrapper .antigravity-svg-success {
+  animation: none; /* Override standard bounce */
+}
+
+/* 1. Circle stroke draw-in (starts as bounce settles) */
+.antigravity-svg-success .antigravity-svg-circle {
+  stroke-dasharray: 63;
+  stroke-dashoffset: 63;
+  animation: antigravity-draw-circle 0.5s cubic-bezier(0.4, 0, 0.2, 1) 0.35s forwards;
+}
+
+@keyframes antigravity-draw-circle {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* 2. Checkmark draw-in (follows circle completion) */
+.antigravity-svg-success .antigravity-svg-check {
+  stroke-dasharray: 22;
+  stroke-dashoffset: 22;
+  animation: antigravity-draw-check 0.4s cubic-bezier(0.19, 1, 0.22, 1) 0.55s forwards;
+}
+
+@keyframes antigravity-draw-check {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* 3. Exit: SVG spin and scale down */
+.antigravity-leaving .antigravity-svg-success {
+  animation: antigravity-exit-spin 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards !important;
+  transform-origin: center;
+}
+
+@keyframes antigravity-exit-spin {
+  0% {
+    transform: rotate(0deg) scale(1);
+  }
+  30% {
+    transform: rotate(120deg) scale(1.15); /* Elastic windup */
+  }
+  100% {
+    transform: rotate(360deg) scale(0);
+    opacity: 0;
+  }
+}
+
+/* 4. Exit: checkmark retract stroke */
+.antigravity-leaving .antigravity-svg-check {
+  animation: antigravity-undraw-check 0.3s ease-in forwards !important;
+}
+
+@keyframes antigravity-undraw-check {
+  from {
+    stroke-dashoffset: 0;
+  }
+  to {
+    stroke-dashoffset: -22; /* retract forward to dissolve into the spin */
+  }
+}
+
+/* antigravity Primary Animated SVG (Ringing Bell & Gravity Drop) */
+.antigravity-icon-wrapper .antigravity-svg-bell {
+  animation: antigravity-bell-idle 4.0s ease-in-out 2.8s infinite;
+  transform-origin: top center;
+}
+
+@keyframes antigravity-bell-idle {
+  0%, 25%, 100% { transform: rotate(0); }
+  6% { transform: rotate(4deg); }
+  18% { transform: rotate(-4deg); }
+}
+
+.antigravity-svg-bell .antigravity-svg-bell-body {
+  transform-origin: top center;
+  animation: antigravity-bell-swing 1.2s cubic-bezier(0.36, 0.07, 0.19, 0.97) 0.35s 1 alternate forwards;
+}
+
+.antigravity-svg-bell .antigravity-svg-bell-clapper {
+  transform-origin: top center;
+  animation: antigravity-clapper-swing 1.2s cubic-bezier(0.36, 0.07, 0.19, 0.97) 0.35s 1 alternate forwards;
+}
+
+@keyframes antigravity-bell-swing {
+  0% { transform: rotate(0); }
+  15% { transform: rotate(18deg); }
+  30% { transform: rotate(-16deg); }
+  45% { transform: rotate(12deg); }
+  60% { transform: rotate(-10deg); }
+  75% { transform: rotate(6deg); }
+  90% { transform: rotate(-3deg); }
+  100% { transform: rotate(0); }
+}
+
+@keyframes antigravity-clapper-swing {
+  0% { transform: translateX(0); }
+  15% { transform: translateX(-4px); }
+  30% { transform: translateX(4px); }
+  45% { transform: translateX(-3px); }
+  60% { transform: translateX(2px); }
+  75% { transform: translateX(-1px); }
+  90% { transform: translateX(0.5px); }
+  100% { transform: translateX(0); }
+}
+
+.antigravity-leaving .antigravity-svg-bell {
+  animation: antigravity-exit-bell-drop 0.4s cubic-bezier(0.4, 0, 1, 1) forwards !important;
+}
+
+@keyframes antigravity-exit-bell-drop {
+  0% { transform: translate3d(0, 0, 0) rotate(0); opacity: 1; }
+  30% { transform: translate3d(0, -3px, 0) rotate(-10deg); opacity: 1; }
+  100% { transform: translate3d(0, 45px, 0) rotate(20deg); opacity: 0; }
+}
+
+/* antigravity Danger Animated SVG (Cross draw & Shake & Burst) */
+.antigravity-icon-wrapper .antigravity-svg-danger {
+  animation: 
+    antigravity-danger-shake 0.4s cubic-bezier(0.36, 0.07, 0.19, 0.97) 0.85s forwards,
+    antigravity-danger-idle 4.0s ease-in-out 2.8s infinite;
+  transform-origin: center;
+}
+
+@keyframes antigravity-danger-idle {
+  0%, 20%, 100% { opacity: 1; }
+  5%, 15% { opacity: 0.4; }
+}
+
+.antigravity-svg-danger .antigravity-svg-circle {
+  stroke-dasharray: 63;
+  stroke-dashoffset: 63;
+  animation: antigravity-draw-circle 0.5s cubic-bezier(0.4, 0, 0.2, 1) 0.35s forwards;
+}
+
+.antigravity-svg-danger .antigravity-svg-line1,
+.antigravity-svg-danger .antigravity-svg-line2 {
+  stroke-dasharray: 9;
+  stroke-dashoffset: 9;
+}
+
+.antigravity-svg-danger .antigravity-svg-line1 {
+  animation: antigravity-draw-line 0.3s cubic-bezier(0.19, 1, 0.22, 1) 0.55s forwards;
+}
+
+.antigravity-svg-danger .antigravity-svg-line2 {
+  animation: antigravity-draw-line 0.3s cubic-bezier(0.19, 1, 0.22, 1) 0.65s forwards;
+}
+
+@keyframes antigravity-draw-line {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes antigravity-danger-shake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-3px); }
+  40%, 80% { transform: translateX(3px); }
+}
+
+.antigravity-leaving .antigravity-svg-danger {
+  animation: antigravity-exit-danger-burst 0.4s cubic-bezier(0.19, 1, 0.22, 1) forwards !important;
+}
+
+@keyframes antigravity-exit-danger-burst {
+  0% { transform: scale(1) rotate(0); opacity: 1; }
+  100% { transform: scale(1.6) rotate(45deg); opacity: 0; }
+}
+
+/* antigravity Warning Animated SVG (Triangle draw & Tip Fall) */
+.antigravity-icon-wrapper .antigravity-svg-warning {
+  animation: none;
+}
+
+.antigravity-svg-warning .antigravity-svg-triangle {
+  stroke-dasharray: 60;
+  stroke-dashoffset: 60;
+  animation: antigravity-draw-triangle 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.35s forwards;
+}
+
+@keyframes antigravity-draw-triangle {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.antigravity-svg-warning .antigravity-svg-stem {
+  stroke-dasharray: 5;
+  stroke-dashoffset: 5;
+  animation: 
+    antigravity-draw-line 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.6s forwards,
+    antigravity-warning-hop 4.0s cubic-bezier(0.25, 0.8, 0.25, 1) 2.8s infinite;
+}
+
+.antigravity-svg-warning .antigravity-svg-dot {
+  stroke-dasharray: 2;
+  stroke-dashoffset: 2;
+  animation: 
+    antigravity-draw-line 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.5) 0.75s forwards,
+    antigravity-warning-hop 4.0s cubic-bezier(0.25, 0.8, 0.25, 1) 2.8s infinite;
+}
+
+@keyframes antigravity-warning-hop {
+  0%, 15%, 100% { transform: translateY(0); }
+  7% { transform: translateY(-3px); }
+}
+
+.antigravity-leaving .antigravity-svg-warning {
+  animation: antigravity-exit-warning-tip 0.45s cubic-bezier(0.4, 0, 1, 1) forwards !important;
+  transform-origin: center bottom;
+}
+
+@keyframes antigravity-exit-warning-tip {
+  0% { transform: rotate(0) translate3d(0, 0, 0); opacity: 1; }
+  35% { transform: rotate(35deg) translate3d(0, 0, 0); opacity: 1; }
+  100% { transform: rotate(45deg) translate3d(0, 45px, 0); opacity: 0; }
+}
+
+/* antigravity Info Animated SVG (Info draw & Helicopter Spin) */
+.antigravity-icon-wrapper .antigravity-svg-info {
+  animation: antigravity-info-idle 4.0s ease-in-out 2.8s infinite;
+  transform-origin: center;
+}
+
+@keyframes antigravity-info-idle {
+  0%, 25%, 100% { transform: translateY(0); }
+  12% { transform: translateY(-2px); }
+}
+
+.antigravity-svg-info .antigravity-svg-circle {
+  stroke-dasharray: 63;
+  stroke-dashoffset: 63;
+  animation: antigravity-draw-circle 0.5s cubic-bezier(0.4, 0, 0.2, 1) 0.35s forwards;
+}
+
+.antigravity-svg-info .antigravity-svg-stem {
+  stroke-dasharray: 5;
+  stroke-dashoffset: 5;
+  animation: antigravity-draw-line 0.35s cubic-bezier(0.19, 1, 0.22, 1) 0.55s forwards;
+}
+
+.antigravity-svg-info .antigravity-svg-dot {
+  transform: translateY(-8px);
+  opacity: 0;
+  animation: antigravity-dot-drop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.5) 0.7s forwards;
+}
+
+@keyframes antigravity-dot-drop {
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.antigravity-leaving .antigravity-svg-info {
+  animation: antigravity-exit-info-spin 0.4s cubic-bezier(0.4, 0, 1, 1) forwards !important;
+  transform-origin: center;
+}
+
+@keyframes antigravity-exit-info-spin {
+  0% { transform: rotate(0) scale(1); opacity: 1; }
+  30% { transform: rotate(-45deg) scale(1.1); opacity: 1; }
+  100% { transform: rotate(360deg) scale(0); opacity: 0; }
+}
+
